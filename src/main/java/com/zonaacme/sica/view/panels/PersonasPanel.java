@@ -35,14 +35,14 @@ public class PersonasPanel extends BasePanel {
             "ID", "Nombre", "Documento", "Empresa", "Tipo", "Estado de acceso"
     };
 
-    private final JTextField filtro = UiTheme.campo("Filtrar por nombre, documento o empresa…");
+    private final JTextField filtro = UiTheme.campo("Filtrar por nombre, documento o empresa...");
     private final GenericTableModel<Persona> modelo = new GenericTableModel<>(COLUMNAS,
             p -> "#" + p.getId(),
             Persona::getNombre,
             Persona::getDocumentoIdentidad,
-            p -> p.getNombreEmpresa() == null ? "—" : p.getNombreEmpresa(),
-            p -> p.getTipoPersona() == null ? "—" : p.getTipoPersona().getEtiqueta(),
-            p -> p.getNombreEstado() == null ? "—" : p.getNombreEstado());
+            p -> p.getNombreEmpresa() == null ? "-" : p.getNombreEmpresa(),
+            p -> p.getTipoPersona() == null ? "-" : p.getTipoPersona().getEtiqueta(),
+            p -> p.getNombreEstado() == null ? "-" : p.getNombreEstado());
     private final JTable tabla = tabla();
 
     public PersonasPanel(Sesion sesion) {
@@ -65,7 +65,7 @@ public class PersonasPanel extends BasePanel {
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         acciones.setOpaque(false);
         if (puede("crear_persona")) {
-            JButton nuevo = UiTheme.boton("＋ Nueva persona", UiTheme.Variedad.PRIMARIO);
+            JButton nuevo = UiTheme.boton("+ Nueva persona", UiTheme.Variedad.PRIMARIO);
             nuevo.addActionListener(e -> nuevo());
             acciones.add(nuevo);
         }

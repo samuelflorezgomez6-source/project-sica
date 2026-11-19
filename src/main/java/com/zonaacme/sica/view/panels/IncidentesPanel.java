@@ -35,7 +35,7 @@ public class IncidentesPanel extends BasePanel {
             i -> "#" + i.getId(),
             i -> DateUtil.formatear(i.getFecha()),
             i -> i.getResumenVisita() == null ? "#" + i.getVisitaId() : i.getResumenVisita(),
-            i -> i.getNombreReportador() == null ? "—" : i.getNombreReportador(),
+            i -> i.getNombreReportador() == null ? "-" : i.getNombreReportador(),
             Incidente::getDescripcion);
     private final JTable tabla = UiTheme.tabla();
 
@@ -57,7 +57,7 @@ public class IncidentesPanel extends BasePanel {
         titulo.setOpaque(false);
         titulo.add(UiTheme.titulo("Gestión de Incidentes"), BorderLayout.WEST);
         if (puede("registrar_incidente")) {
-            JButton nuevo = UiTheme.boton("＋ Registrar incidente", UiTheme.Variedad.PELIGRO);
+            JButton nuevo = UiTheme.boton("+ Registrar incidente", UiTheme.Variedad.PELIGRO);
             nuevo.addActionListener(e -> registrar());
             JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             acciones.setOpaque(false);
@@ -77,7 +77,7 @@ public class IncidentesPanel extends BasePanel {
         }
         JComboBox<Visita> combo = new JComboBox<>(visitas.toArray(new Visita[0]));
         combo.setRenderer((list, value, index, selected, focus) -> new JLabel(
-                value == null ? "—" : "Visita #" + value.getId() + " · " + value.getNombrePersona()));
+                value == null ? "-" : "Visita #" + value.getId() + " - " + value.getNombrePersona()));
         JTextField descripcion = new JTextField(32);
 
         JPanel form = new JPanel(new GridLayout(0, 1, 8, 8));

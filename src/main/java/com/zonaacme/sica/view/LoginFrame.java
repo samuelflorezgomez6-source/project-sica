@@ -33,7 +33,7 @@ public class LoginFrame extends JFrame {
     private JButton botonIngresar;
 
     public LoginFrame() {
-        super("SICA · Iniciar sesión");
+        super("SICA - Iniciar sesión");
         setSize(940, 540);
         setMinimumSize(new Dimension(820, 500));
         setLocationRelativeTo(null);
@@ -53,7 +53,7 @@ public class LoginFrame extends JFrame {
         marca.setLayout(new BoxLayout(marca, BoxLayout.Y_AXIS));
         marca.setBorder(BorderFactory.createEmptyBorder(52, 38, 40, 38));
 
-        JLabel simbolo = new JLabel("◈", SwingConstants.CENTER);
+        JLabel simbolo = new JLabel("[S]", SwingConstants.CENTER);
         simbolo.setFont(new Font("Segoe UI", Font.PLAIN, 52));
         simbolo.setForeground(new Color(150, 200, 255));
         simbolo.setAlignmentX(LEFT_ALIGNMENT);
@@ -74,14 +74,14 @@ public class LoginFrame extends JFrame {
         marca.add(Box.createVerticalStrut(4));
         marca.add(descripcion);
         marca.add(Box.createVerticalStrut(36));
-        marca.add(balada("✓", "Acceso auditado en cada operación"));
+        marca.add(balada(">", "Acceso auditado en cada operación"));
         marca.add(Box.createVerticalStrut(12));
-        marca.add(balada("✓", "Aprobaciones en tiempo real"));
+        marca.add(balada(">", "Aprobaciones en tiempo real"));
         marca.add(Box.createVerticalStrut(12));
-        marca.add(balada("✓", "Zona Acme · 30+ empresas"));
+        marca.add(balada(">", "Zona Acme - 30+ empresas"));
         marca.add(Box.createVerticalGlue());
 
-        JLabel pie = new JLabel("Java SE 17 · Swing · FlatLaf · MySQL 8");
+        JLabel pie = new JLabel("Java SE 17 - Swing - FlatLaf - MySQL 8");
         pie.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         pie.setForeground(new Color(160, 185, 220));
         pie.setAlignmentX(LEFT_ALIGNMENT);
@@ -144,8 +144,8 @@ public class LoginFrame extends JFrame {
         formulario.add(nuevaVentana, g);
 
         JLabel credenciales = new JLabel("<html><b>Credenciales de prueba</b> (contraseña: Acme2024!)<br>"
-                + "superusuario@zonaacme.com · supervisor@zonaacme.com<br>"
-                + "guarda@zonaacme.com · funcionario@globex.com</html>");
+                + "superusuario@zonaacme.com - supervisor@zonaacme.com<br>"
+                + "guarda@zonaacme.com - funcionario@globex.com</html>");
         credenciales.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         credenciales.setForeground(UiTheme.TEXTO_SUAVE);
         credenciales.setBorder(BorderFactory.createEmptyBorder(14, 8, 0, 8));

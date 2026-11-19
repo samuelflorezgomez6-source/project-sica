@@ -26,7 +26,7 @@ public class EmpresasPanel extends BasePanel {
     private final GenericTableModel<Empresa> modelo = new GenericTableModel<>(COLUMNAS,
             e -> "#" + e.getId(),
             Empresa::getNombre,
-            e -> e.getContactoPrincipal() == null ? "—" : e.getContactoPrincipal());
+            e -> e.getContactoPrincipal() == null ? "-" : e.getContactoPrincipal());
     private final JTable tabla = tabla();
 
     public EmpresasPanel(Sesion sesion) {
@@ -49,7 +49,7 @@ public class EmpresasPanel extends BasePanel {
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         acciones.setOpaque(false);
         if (puede("crear_empresa")) {
-            JButton nuevo = UiTheme.boton("＋ Nueva empresa", UiTheme.Variedad.PRIMARIO);
+            JButton nuevo = UiTheme.boton("+ Nueva empresa", UiTheme.Variedad.PRIMARIO);
             nuevo.addActionListener(e -> nuevo());
             acciones.add(nuevo);
         }

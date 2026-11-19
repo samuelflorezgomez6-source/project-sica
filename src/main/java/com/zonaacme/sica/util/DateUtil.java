@@ -23,12 +23,12 @@ public final class DateUtil {
     }
 
     public static String formatear(LocalDateTime fecha) {
-        return fecha == null ? "—" : fecha.format(FORMATO_TABLA);
+        return fecha == null ? "-" : fecha.format(FORMATO_TABLA);
     }
 
     public static String formatear(Timestamp fecha) {
         if (fecha == null) {
-            return "—";
+            return "-";
         }
         LocalDateTime local = LocalDateTime.ofInstant(fecha.toInstant(), ZoneId.systemDefault());
         return local.format(FORMATO_TABLA);

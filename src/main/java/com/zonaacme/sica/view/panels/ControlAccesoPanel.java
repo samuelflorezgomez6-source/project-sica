@@ -44,7 +44,7 @@ public class ControlAccesoPanel extends BasePanel {
             "ID", "Persona", "Documento", "Empresa", "Estado", "Entrada", "Salida", "Placa"
     };
 
-    private final JTextField busqueda = UiTheme.campo("Número de documento, nombre o empresa…");
+    private final JTextField busqueda = UiTheme.campo("Número de documento, nombre o empresa...");
     private final JLabel foto = new JLabel();
     private final JLabel datosPersona = new JLabel("Busque una persona para ver sus datos");
     private Persona personaSeleccionada;
@@ -75,7 +75,7 @@ public class ControlAccesoPanel extends BasePanel {
         JPanel titulo = new JPanel(new BorderLayout(10, 0));
         titulo.setOpaque(false);
         JLabel et = UiTheme.titulo("Control de Acceso");
-        et.setText("Control de Acceso  ·  Zona Acme");
+        et.setText("Control de Acceso  -  Zona Acme");
         titulo.add(et, BorderLayout.WEST);
 
         JPanel flujos = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
@@ -140,7 +140,7 @@ public class ControlAccesoPanel extends BasePanel {
         checkIn.addActionListener(e -> hacerCheckIn());
         surCheck.add(checkIn);
         listas.add(surCheck, BorderLayout.SOUTH);
-        pestanas.addTab("Aprobadas · pendientes de ingreso", listas);
+        pestanas.addTab("Aprobadas - pendientes de ingreso", listas);
 
         JPanel dentro = new JPanel(new BorderLayout());
         dentro.add(new JScrollPane(tablaDentro), BorderLayout.CENTER);
@@ -187,7 +187,7 @@ public class ControlAccesoPanel extends BasePanel {
                 Visita::getNombreEstado,
                 v -> DateUtil.formatear(v.getFechaEntrada()),
                 v -> DateUtil.formatear(v.getFechaSalida()),
-                v -> v.getVehiculoPlaca() == null ? "—" : v.getVehiculoPlaca());
+                v -> v.getVehiculoPlaca() == null ? "-" : v.getVehiculoPlaca());
     }
 
     private static JTable tabla(GenericTableModel<Visita> modelo) {
@@ -225,11 +225,11 @@ public class ControlAccesoPanel extends BasePanel {
     private void mostrarPersona() {
         String html = "<html><b>" + personaSeleccionada.getNombre() + "</b><br>"
                 + "Documento: " + personaSeleccionada.getDocumentoIdentidad()
-                + " &nbsp;·&nbsp; Tipo: " + personaSeleccionada.getTipoPersona().getEtiqueta()
+                + " &nbsp;-&nbsp; Tipo: " + personaSeleccionada.getTipoPersona().getEtiqueta()
                 + "<br>Empresa: " + (personaSeleccionada.getNombreEmpresa() == null
-                    ? "—" : personaSeleccionada.getNombreEmpresa())
-                + " &nbsp;·&nbsp; Acceso: " + (personaSeleccionada.getNombreEstado() == null
-                    ? "—" : personaSeleccionada.getNombreEstado()) + "</html>";
+                    ? "-" : personaSeleccionada.getNombreEmpresa())
+                + " &nbsp;-&nbsp; Acceso: " + (personaSeleccionada.getNombreEstado() == null
+                    ? "-" : personaSeleccionada.getNombreEstado()) + "</html>";
         datosPersona.setText(html);
         String iniciales = personaSeleccionada.getNombre().substring(0, 1).toUpperCase();
         Formularios.cargarFoto(foto, personaSeleccionada.getUrlFoto(), iniciales);

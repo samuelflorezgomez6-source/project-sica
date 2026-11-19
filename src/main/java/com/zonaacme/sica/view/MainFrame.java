@@ -40,7 +40,7 @@ public class MainFrame extends JFrame {
     private JButton botonActivo;
 
     public MainFrame(Sesion sesion) {
-        super("SICA · Zona Acme");
+        super("SICA - Zona Acme");
         this.sesion = sesion;
         setSize(1320, 780);
         setMinimumSize(new Dimension(1100, 680));
@@ -69,10 +69,10 @@ public class MainFrame extends JFrame {
 
         JPanel izquierda = new JPanel(new BorderLayout());
         izquierda.setOpaque(false);
-        JLabel titulo = new JLabel("SICA  ·  Panel de Control");
+        JLabel titulo = new JLabel("SICA  -  Panel de Control");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 17));
         titulo.setForeground(UiTheme.TEXTO);
-        JLabel sub = new JLabel("Zona Acme — Sistema Integrado de Control de Acceso");
+        JLabel sub = new JLabel("Zona Acme - Sistema Integrado de Control de Acceso");
         sub.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         sub.setForeground(UiTheme.TEXTO_SUAVE);
         izquierda.add(titulo, BorderLayout.NORTH);
@@ -85,7 +85,7 @@ public class MainFrame extends JFrame {
                 + sesion.getUsuario().getNombreRol() + "</font></html>");
         usuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
-        JButton nuevaVentana = UiTheme.boton("＋ Nueva ventana", UiTheme.Variedad.SECONDARY);
+        JButton nuevaVentana = UiTheme.boton("+ Nueva ventana", UiTheme.Variedad.SECONDARY);
         nuevaVentana.addActionListener(e -> navegacion.abrirNuevaVentanaSesion());
 
         JButton salir = UiTheme.boton("Cerrar sesión", UiTheme.Variedad.SECONDARY);
@@ -119,17 +119,17 @@ public class MainFrame extends JFrame {
     private void construirModulos() {
         // Se pasa un Supplier: el panel solo se construye si el rol tiene el permiso.
         // Así ningún panel ejecuta consultas para las que su usuario no está autorizado.
-        anadirModulo(menu, "▣  Control de Acceso", "control", "ver_control_acceso",
+        anadirModulo(menu, "Control de Acceso", "control", "ver_control_acceso",
                 () -> new ControlAccesoPanel(sesion));
-        anadirModulo(menu, "◉  Gestión de Personas", "personas", "ver_personas",
+        anadirModulo(menu, "Gestión de Personas", "personas", "ver_personas",
                 () -> new PersonasPanel(sesion));
-        anadirModulo(menu, "▤  Gestión de Empresas", "empresas", "ver_empresas",
+        anadirModulo(menu, "Gestión de Empresas", "empresas", "ver_empresas",
                 () -> new EmpresasPanel(sesion));
-        anadirModulo(menu, "⚙  Usuarios y Permisos", "usuarios", "ver_usuarios",
+        anadirModulo(menu, "Usuarios y Permisos", "usuarios", "ver_usuarios",
                 () -> new UsuariosPanel(sesion));
-        anadirModulo(menu, "⚑  Incidentes", "incidentes", "ver_incidentes",
+        anadirModulo(menu, "Incidentes", "incidentes", "ver_incidentes",
                 () -> new IncidentesPanel(sesion));
-        anadirModulo(menu, "◫  Reportes y Auditoría", "reportes", "ver_reportes",
+        anadirModulo(menu, "Reportes y Auditoría", "reportes", "ver_reportes",
                 () -> new ReportesPanel(sesion));
 
         if (areaTrabajo.getComponentCount() == 0) {

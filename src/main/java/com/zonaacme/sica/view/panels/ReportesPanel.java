@@ -43,7 +43,7 @@ public class ReportesPanel extends BasePanel {
 
     private final GenericTableModel<Visita> modeloDentro = modeloVisitas();
     private final GenericTableModel<Visita> modeloHistorial = modeloVisitas();
-    private final JTextField filtroHistorial = UiTheme.campo("Filtrar por persona, documento, empresa o estado…");
+    private final JTextField filtroHistorial = UiTheme.campo("Filtrar por persona, documento, empresa o estado...");
 
     private final GenericTableModel<BitacoraAuditoria> modeloBitacora = new GenericTableModel<>(
             new String[]{"ID", "Fecha", "Usuario", "Acción", "Tabla", "Registro", "Detalles"},
@@ -51,8 +51,8 @@ public class ReportesPanel extends BasePanel {
             b -> DateUtil.formatear(b.getFechaHora()),
             b -> b.getNombreUsuario() == null ? "Sistema / invitado" : b.getNombreUsuario(),
             BitacoraAuditoria::getAccionRealizada,
-            b -> b.getTablaAfectada() == null ? "—" : b.getTablaAfectada(),
-            b -> b.getRegistroIdAfectado() == null ? "—" : "#" + b.getRegistroIdAfectado(),
+            b -> b.getTablaAfectada() == null ? "-" : b.getTablaAfectada(),
+            b -> b.getRegistroIdAfectado() == null ? "-" : "#" + b.getRegistroIdAfectado(),
             BitacoraAuditoria::getDetalles);
 
     private final JComboBox<String> comboAccion = new JComboBox<>();

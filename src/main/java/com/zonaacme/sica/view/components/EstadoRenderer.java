@@ -17,7 +17,7 @@ public class EstadoRenderer extends DefaultTableCellRenderer {
 
     @Override
     protected void setValue(Object value) {
-        String texto = value == null ? "—" : value.toString();
+        String texto = value == null ? "-" : value.toString();
         setText(texto);
         Color color = colorPara(texto);
         setForeground(color);

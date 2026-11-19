@@ -55,7 +55,7 @@ public final class Formularios {
                     .findFirst().ifPresent(comboEmpresas::setSelectedItem);
         }
         comboEmpresas.setRenderer((list, value, index, selected, focus) ->
-                new JLabel(value == null ? "— Sin empresa —" : value.getNombre()));
+                new JLabel(value == null ? "- Sin empresa -" : value.getNombre()));
 
         JComboBox<TipoPersona> comboTipo = new JComboBox<>(TipoPersona.values());
         if (inicial != null && inicial.getTipoPersona() != null) {

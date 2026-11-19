@@ -78,7 +78,7 @@ public abstract class BasePanel extends JPanel implements VisitaObserver {
     protected JPanel barraEstado() {
         JPanel barra = new JPanel(new FlowLayout(FlowLayout.LEFT));
         barra.setOpaque(false);
-        etiquetaEstado = new JLabel("● En vivo: esperando eventos…");
+        etiquetaEstado = new JLabel("> En vivo: esperando eventos...");
         etiquetaEstado.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         etiquetaEstado.setForeground(UiTheme.TEXTO_SUAVE);
         barra.add(etiquetaEstado);
@@ -103,7 +103,7 @@ public abstract class BasePanel extends JPanel implements VisitaObserver {
         try {
             recargar();
             if (etiquetaEstado != null) {
-                etiquetaEstado.setText("● En vivo [" + tipo + "]: " + mensaje);
+                etiquetaEstado.setText("> En vivo [" + tipo + "]: " + mensaje);
                 etiquetaEstado.setForeground(UiTheme.colorEstadoPorEvento(tipo));
             }
         } catch (RuntimeException ignorado) {

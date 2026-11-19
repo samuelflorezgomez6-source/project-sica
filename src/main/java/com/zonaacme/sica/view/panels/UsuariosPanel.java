@@ -104,7 +104,7 @@ public class UsuariosPanel extends BasePanel {
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         acciones.setOpaque(false);
         if (puede("crear_usuario")) {
-            JButton nuevo = UiTheme.boton("＋ Nuevo usuario", UiTheme.Variedad.PRIMARIO);
+            JButton nuevo = UiTheme.boton("+ Nuevo usuario", UiTheme.Variedad.PRIMARIO);
             nuevo.addActionListener(e -> nuevo());
             acciones.add(nuevo);
         }
