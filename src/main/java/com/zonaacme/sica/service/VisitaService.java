@@ -16,6 +16,9 @@ public interface VisitaService extends VisitaSubject {
 
     List<Visita> pendientes(Sesion sesion);
 
+    /** Visitas ya aprobadas que todavía no registraron ingreso (lista del guarda). */
+    List<Visita> aprobadasParaCheckIn(Sesion sesion);
+
     List<Visita> dentro(Sesion sesion);
 
     List<Visita> historial(Sesion sesion);
