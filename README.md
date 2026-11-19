@@ -226,53 +226,357 @@ erDiagram
 
 ---
 
-## 5. Instalación y ejecución
+## 5. Instalación y ejecución desde cero (para cualquier computador)
 
-### 5.1 Prerrequisitos
+Esta sección está escrita **paso a paso, desde cero**, para que funcione tanto en tu PC como en la del profesor. No se asume que sabes instalar nada. Si un paso te parece obvio, igual léelo: el orden importa.
 
-- **JDK 17+** (verificado con Eclipse Temurin 17.0.21).
-- **Maven 3.9+** en el `PATH` (`mvn -version`).
-- **Docker Desktop** en ejecución con `docker compose` disponible.
+### 5.0 Entender qué vamos a hacer (antes de tocar nada)
 
-### 5.2 Levantar la base de datos
+SICA son **dos piezas separadas**:
 
-```bash
-# Desde la raíz del proyecto
-docker compose up -d
-
-# Esperar a que MySQL esté sano y verificar que las 11 tablas se crearon
-docker compose exec sica-mysql mysql -uroot -proot1234 \
-  -e "USE sica_db; SHOW TABLES; SELECT COUNT(*) AS permisos FROM permisos; SELECT * FROM roles;"
-```
-
-Resultado esperado: 11 tablas, 25 permisos y 4 roles.
-
-| Servicio | Dirección | Credenciales |
+| Pieza | Qué es | Quién la levanta |
 |---|---|---|
-| MySQL 8.0 | `localhost:3307` | usuario `sica_user` / contraseña `sica_pass` (root: `root1234`) |
-| phpMyAdmin | <http://localhost:8081> | `sica_user` / `sica_pass` o `root` / `root1234` |
+| La **base de datos** (MySQL) | El "archivo" donde se guardan personas, visitas, roles y auditoría. | Docker (`docker compose up -d`) |
+| El **programa** (Java) | Las ventanas que ves y con las que trabajas. | Maven (`mvn exec:java`) |
 
-> Usamos el puerto **3307** en el equipo host para no chocar con un MySQL local ya instalado (muy común en Windows). Dentro del contenedor MySQL sigue escuchando en 3306 y phpMyAdmin se conecta por la red interna de Docker. Si en tu PC no hay MySQL local, también funciona igual.
+**Docker no abre el programa.** Docker solo enciende MySQL y phpMyAdmin. El programa se abre después con Maven. Esta es la confusión más común.
 
-> Los scripts `db/schema.sql` y `db/data.sql` se montan en `/docker-entrypoint-initdb.d` y se ejecutan **solo la primera vez** que se crea el volumen `sica_mysql_data`. Para reiniciar los datos: `docker compose down -v && docker compose up -d`.
+Necesitamos instalar **3 herramientas**:
 
-### 5.3 Compilar y ejecutar
+1. **Java 17** = el motor que entiende el código.
+2. **Maven** = el ayudante que junta las piezas y ejecuta el programa.
+3. **Docker Desktop** = la lonchera que enciende MySQL y phpMyAdmin.
 
-```bash
-# Opción A: ejecutar con Maven (la más sencilla)
-mvn clean package
-mvn exec:java
+Y necesitamos **la carpeta del proyecto** (el código).
 
-# Opción B: jar ejecutable
-mvn clean package
-mvn dependency:copy-dependencies -DoutputDirectory=target/lib
-java -jar target/sica-1.0.0.jar
+> **Concepto útil - ¿qué es el PATH?**
+> El PATH es una lista de carpetas que Windows revisa cuando escribes un comando. Si escribes `mvn` y la carpeta de Maven no está en esa lista, Windows dice "no se reconoce como nombre de un cmdlet...". Por eso en el paso 5.3 agregamos Maven al PATH y por eso hay que **abrir una terminal nueva** después.
 
-# Pruebas unitarias
-mvn test
+> **Concepto útil - ¿qué es un puerto?**
+> Es el número de "puerta" de un programa. MySQL de Docker entra por la puerta **3307** y phpMyAdmin por la **8081**. Usamos 3307 (y no 3306) porque muchos PCs tienen un MySQL local ocupando 3306. Esto funciona igual en tu PC que en otra.
+
+---
+
+### 5.1 Paso 1: Instalar Java 17 (JDK)
+
+1. Abre el navegador y entra a `https://adoptium.net/`.
+2. Descarga **Temurin JDK 17** para Windows (instalador `.msi`, arquitectura x64).
+3. Abre el archivo descargado y haz clic en **Next** hasta terminar. Deja todas las opciones por defecto.
+4. Cuando termine, **cierra y abre una terminal nueva** (PowerShell o CMD).
+5. Escribe y pulsa Enter:
+
+```powershell
+java -version
 ```
 
-Si MySQL no está disponible, la aplicación muestra un aviso indicando la URL JDBC; la ventana de login se abre igual para que se vea el mensaje de error al intentar ingresar.
+6. Debe aparecer algo como:
+
+```text
+openjdk version "17.0.21" ...
+```
+
+Si aparece `java version "1.8..."` u otra versión, reinstala el JDK 17 y asegúrate de elegir esa versión.
+
+---
+
+### 5.2 Paso 2: Instalar Maven
+
+1. Descarga `apache-maven-3.9.9-bin.zip` desde `https://maven.apache.org/download.cgi`.
+2. Crea la carpeta `C:\Users\TU_USUARIO\tools` (cambia `TU_USUARIO` por tu nombre de usuario de Windows).
+3. Abre el ZIP y arrastra la carpeta `apache-maven-3.9.9` dentro de `C:\Users\TU_USUARIO\tools`.
+4. Debes tener este archivo: `C:\Users\TU_USUARIO\tools\apache-maven-3.9.9\bin\mvn.cmd`.
+5. Agregar Maven al PATH (para poder escribir solo `mvn`):
+
+   a. Presiona la tecla Windows y escribe **"variables de entorno"**.
+   b. Abre **"Editar las variables de entorno del sistema"**.
+   c. En la sección **Variables de usuario**, busca `Path` y haz clic en **Editar**.
+   d. Clic en **Nueva** y pega:
+
+```text
+C:\Users\TU_USUARIO\tools\apache-maven-3.9.9\bin
+```
+
+   e. Clic en **Aceptar** en las dos ventanas.
+   f. **Cierra la terminal y abre una nueva** (los cambios no afectan a la terminal que ya estaba abierta).
+
+6. Verifica:
+
+```powershell
+mvn -version
+```
+
+Debe decir `Apache Maven 3.9.9` y `Java version: 17...`.
+
+**Si no funciona o no quieres tocar el PATH:** puedes usar siempre la ruta completa:
+
+```powershell
+C:\Users\TU_USUARIO\tools\apache-maven-3.9.9\bin\mvn.cmd -version
+```
+
+En este proyecto ya quedó instalado en `C:\Users\Miguel\tools\apache-maven-3.9.9`. En otra máquina, repite este paso con el usuario de esa máquina.
+
+---
+
+### 5.3 Paso 3: Instalar y abrir Docker Desktop
+
+1. Descarga Docker Desktop desde `https://www.docker.com/products/docker-desktop/` (versión Windows).
+2. Ejecuta el instalador y deja las opciones por defecto. Puede pedir permiso de administrador.
+3. **Reinicia el computador** si el instalador lo pide.
+4. **Abre Docker Desktop** con doble clic en su ícono y espera. El ícono deja de moverse cuando ya está listo.
+   - Si aparece un error de WSL, instala el subsistema de Windows según lo que el propio Docker te indique.
+5. En una terminal nueva verifica:
+
+```powershell
+docker -v
+docker compose version
+```
+
+Ambos deben mostrar una versión.
+
+> **El error más común:** ver `cannot connect to the docker daemon`. Significa que **Docker Desktop no está abierto**. Ábrelo, espera, y repite el comando. Es como abrir el grifo antes de lavarse las manos.
+
+---
+
+### 5.4 Paso 4: Obtener el código del proyecto
+
+Tienes dos opciones:
+
+**Opción A (recomendada): clonar desde GitHub**
+
+```powershell
+git clone https://github.com/samuelflorezgomez6-source/project-sica.git
+cd project-sica
+```
+
+**Opción B: descargar el ZIP**
+
+1. Entra al repositorio de GitHub.
+2. Clic en **Code** → **Download ZIP**.
+3. Descomprime el ZIP en el Escritorio.
+4. Entra a la carpeta `project-sica`.
+
+**Comprueba que estás en la carpeta correcta.** Debes ver estos 4 elementos:
+
+```text
+pom.xml
+docker-compose.yml
+db\        (carpeta con schema.sql y data.sql)
+src\       (carpeta con el código Java)
+```
+
+Si no ves `pom.xml`, estás en la carpeta equivocada. Entra un nivel más.
+
+---
+
+### 5.5 Paso 5: Abrir una terminal DENTRO de la carpeta del proyecto
+
+En Windows, haz una de estas tres cosas:
+
+- **Opción fácil:** clic derecho sobre la carpeta `project-sica` → **"Abrir en Terminal"** (o "Abrir ventana de PowerShell aquí").
+- **Desde VS Code:** abre la carpeta en VS Code → menú Terminal → **New Terminal**.
+- **A mano:** abre PowerShell y escribe:
+
+```powershell
+cd "C:\Users\TU_USUARIO\Desktop\project-sica"
+```
+
+Para confirmar que estás bien, escribe:
+
+```powershell
+Get-ChildItem
+```
+
+Debes ver `pom.xml`, `docker-compose.yml`, `db` y `src` en la lista.
+
+> **Todos los comandos siguientes se escriben dentro de esa terminal, parados en esa carpeta.**
+
+---
+
+### 5.6 Paso 6: Encender la base de datos
+
+Escribe:
+
+```powershell
+docker compose up -d
+```
+
+**Qué hace cada parte:**
+
+| Parte | Significado |
+|---|---|
+| `docker` | Llama a Docker. |
+| `compose` | Usa el archivo `docker-compose.yml` que está en la carpeta. |
+| `up` | Enciende los servicios. |
+| `-d` | "Detached": siguen corriendo aunque cierres la terminal. |
+
+La **primera vez** tarda más (descarga las imágenes de MySQL y phpMyAdmin). Es normal. Es como esperar a que hierva el agua.
+
+Espera entre 20 y 40 segundos y verifica:
+
+```powershell
+docker compose ps
+```
+
+Debes ver algo así:
+
+```text
+NAME              STATUS                    PORTS
+sica-mysql        Up (healthy)              0.0.0.0:3307->3306/tcp
+sica-phpmyadmin   Up                        0.0.0.0:8081->80/tcp
+```
+
+La palabra **healthy** (sano) confirma que MySQL ya cargó `schema.sql` y `data.sql`.
+
+**Verificación extra (opcional pero tranquilizadora):**
+
+```powershell
+docker compose exec sica-mysql mysql -uroot -proot1234 -e "USE sica_db; SHOW TABLES;"
+```
+
+Deben aparecer **11 nombres de tablas**. Si quieres contar permisos:
+
+```powershell
+docker compose exec sica-mysql mysql -uroot -proot1234 -e "USE sica_db; SELECT COUNT(*) AS permisos FROM permisos; SELECT COUNT(*) AS roles FROM roles;"
+```
+
+Debe decir `25` permisos y `4` roles.
+
+**Forma visual (sin comandos):** abre el navegador en `http://localhost:8081`. Usuario `root`, contraseña `root1234`. Ahí está la base de datos en colores (phpMyAdmin).
+
+---
+
+### 5.7 Paso 7: Compilar el programa
+
+Con Docker ya encendido, escribe:
+
+```powershell
+mvn clean package
+```
+
+**Qué significa:**
+
+| Parte | Significado |
+|---|---|
+| `mvn` | Llama a Maven. |
+| `clean` | Borra la carpeta `target` (restos de compilaciones anteriores). |
+| `package` | Compila el código, ejecuta las pruebas y crea el `.jar`. |
+
+Debes ver al final:
+
+```text
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+```
+
+Si dice `BUILD FAILURE`, lee el mensaje: casi siempre es un error de código o un JDK distinto al 17.
+
+> La primera vez Maven descarga librerías de internet (FlatLaf, mysql-connector, jbcrypt, JUnit). Después ya no necesitas internet para compilar.
+
+---
+
+### 5.8 Paso 8: Abrir el programa
+
+```powershell
+mvn exec:java
+```
+
+**No cierres esta terminal**: mientras la ventana de SICA esté abierta, este comando sigue corriendo.
+
+Aparece la ventana **"SICA - Iniciar sesión"**. Si en cambio aparece un aviso de "Base de datos no disponible", vuelve al paso 6: Docker no está encendido o aún no está `healthy`.
+
+**Ruta alternativa si `mvn` no se reconoce:**
+
+```powershell
+C:\Users\TU_USUARIO\tools\apache-maven-3.9.9\bin\mvn.cmd clean package
+C:\Users\TU_USUARIO\tools\apache-maven-3.9.9\bin\mvn.cmd exec:java
+```
+
+---
+
+### 5.9 Paso 9: Entrar al sistema
+
+En la pantalla de login escribe:
+
+| Correo | Contraseña | Rol |
+|---|---|---|
+| `superusuario@zonaacme.com` | `Acme2024!` | Ve todo |
+| `supervisor@zonaacme.com` | `Acme2024!` | Seguridad, incidentes, reportes y auditoría |
+| `guarda@zonaacme.com` | `Acme2024!` | Registra visitas y hace check-in/out |
+| `funcionario@globex.com` | `Acme2024!` | Pre-registra y aprueba |
+
+La contraseña lleva **mayúscula, signo de exclamación y es exacta**. Cópiala si hace falta.
+
+---
+
+### 5.10 Paso 10: Probar la magia (dos ventanas a la vez)
+
+1. Entra como **Funcionario** (`funcionario@globex.com`).
+2. En la esquina superior derecha haz clic en **+ Nueva ventana**.
+3. En la ventana nueva entra como **Guarda** (`guarda@zonaacme.com`).
+4. En la ventana del Guarda, módulo *Control de Acceso*, busca `20000005` y haz clic en **Registrar no anunciado**.
+5. En la ventana del Funcionario aparece la solicitud **sin recargar**.
+6. Haz clic en **Aprobar**. La ventana del Guarda se actualiza sola.
+
+Eso es el patrón Observer funcionando.
+
+---
+
+### 5.11 Paso 11: Apagar y reiniciar datos
+
+```powershell
+docker compose down
+```
+
+Apaga Docker pero **conserva** los datos. Para volver a empezar limpio (borra la base y vuelve a cargar `schema.sql` y `data.sql`):
+
+```powershell
+docker compose down -v
+docker compose up -d
+```
+
+> La opción `-v` borra el volumen. Úsala solo cuando quieras datos nuevos.
+
+---
+
+### 5.12 Si algo falla: tabla de rescate
+
+| Síntoma | Causa | Solución |
+|---|---|---|
+| `cannot connect to the docker daemon` | Docker Desktop cerrado. | Ábrelo, espera, repite. |
+| `ports are not available ... 3306` | Otro MySQL usa 3306. | Ya usamos 3307. Verifica `docker-compose.yml` y `application.properties`. |
+| `mvn no se reconoce` | PATH viejo o Maven no instalado. | Cierra y abre terminal; o usa la ruta completa del paso 5.8. |
+| `java no se reconoce` | Falta el JDK 17. | Repite el paso 5.1. |
+| `BUILD FAILURE` | Error de código o versión de Java. | Confirma `java -version` = 17 y relee el error. |
+| La app dice "MySQL no disponible" | Contenedor apagado o aún no sano. | `docker compose up -d` y espera a `healthy`. |
+| "Acceso denegado" en el login | Contraseña mal escrita. | Usa exactamente `Acme2024!`. |
+| Aparecen cuadraditos en la interfaz | Fuente que no conoce un símbolo. | Ya se reemplazaron todos por texto ASCII. |
+| Avisos al cerrar la ventana | Hilo de limpieza de MySQL. | Ya están desactivados en `pom.xml`; no afectan. |
+
+---
+
+### 5.13 Checklist imprimible (resumen en 8 líneas)
+
+```text
+[ ] 1. Instalar JDK 17              -> java -version
+[ ] 2. Instalar Maven y ponerlo en PATH -> mvn -version
+[ ] 3. Instalar y ABRIR Docker Desktop
+[ ] 4. Copiar/clonar la carpeta project-sica
+[ ] 5. Terminal dentro de project-sica
+[ ] 6. docker compose up -d  ->  docker compose ps (healthy)
+[ ] 7. mvn clean package     ->  mvn exec:java
+[ ] 8. Login: guarda@zonaacme.com / Acme2024!
+```
+
+---
+
+### 5.14 Notas para la PC del profesor
+
+- No hace falta que tenga MySQL instalado: Docker trae el suyo. Si lo tiene en 3306, no hay problema porque usamos 3307.
+- No hace falta internet después de la primera compilación (salvo que falten librerías).
+- El repositorio debe ser **privado** y el profesor debe estar como **colaborador**.
+- Si el profesor no tiene Git, usa la **Opción B** del paso 5.4 (descargar ZIP).
+- Si no tiene Docker, también se puede usar el MySQL local en 3306 cambiando la URL en `application.properties`, pero la forma recomendada y probada es Docker en 3307.
+- Los archivos están en UTF-8; no hace falta cambiar nada de codificación.
 
 ---
 
