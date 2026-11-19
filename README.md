@@ -2,7 +2,7 @@
 
 ## 1. Introducción
 
-**Zona Acme** es un complejo empresarial con más de 30 empresas. Su control de acceso se apoyaba en libros de registro en papel y radio: no se sabía quién estaba dentro en un momento dado, las visitas no anunciadas bloqueaban la recepción y reconstructir un incidente era una tarea manual e imprecisa.
+**Zona Acme** es un complejo empresarial con más de 30 empresas. Su control de acceso se apoyaba en libros de registro en papel y radio: no se sabía quién estaba dentro en un momento dado, las visitas no anunciadas bloqueaban la recepción y reconstruir un incidente era una tarea manual e imprecisa.
 
 **SICA** sustituye ese proceso por una aplicación de escritorio que centraliza:
 
@@ -24,6 +24,8 @@
 | Pruebas | **JUnit Jupiter 5.10.2** | 15 pruebas unitarias de reglas de negocio (`scope test`). |
 
 > No hay ORM, IOC ni "magia": las dependencias se inyectan a mano en `ServiceLocator`.
+
+> **Codificación:** todos los archivos de texto del repositorio están en **UTF‑8 sin BOM** y con saltos de línea `LF` (ver `.gitattributes`). El README original del proyecto era UTF‑16LE; se normalizó para que Git lo trate como texto y los diffs sean legibles.
 
 ---
 
