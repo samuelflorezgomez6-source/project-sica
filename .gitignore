@@ -1,0 +1,21 @@
+# Maven
+target/
+*.class
+
+# IDEs
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Documento de requerimientos (se entrega aparte, no forma parte del codigo)
+dummie.pdf
+
+# Logs
+*.log

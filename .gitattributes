@@ -1,0 +1,7 @@
+# Normalizar saltos de línea para que el repo sea idéntico en Windows/Linux/macOS.
+* text=auto eol=lf
+
+# Archivos binarios (si se agregan en el futuro) sin conversión.
+*.png binary
+*.jpg binary
+*.jar binary
