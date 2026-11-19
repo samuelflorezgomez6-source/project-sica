@@ -1,0 +1,40 @@
+package com.zonaacme.sica.model.enums;
+
+/** Acciones críticas que SICA deja registradas en {@code bitacora_auditoria}. */
+public enum AccionAuditoria {
+    LOGIN_EXITOSO("LOGIN_EXITOSO"),
+    LOGIN_FALLIDO("LOGIN_FALLIDO"),
+    CREACION_USUARIO("CREACION_USUARIO"),
+    ACTUALIZACION_USUARIO("ACTUALIZACION_USUARIO"),
+    ELIMINACION_USUARIO("ELIMINACION_USUARIO"),
+    CREACION_PERSONA("CREACION_PERSONA"),
+    ACTUALIZACION_PERSONA("ACTUALIZACION_PERSONA"),
+    ELIMINACION_PERSONA("ELIMINACION_PERSONA"),
+    CAMBIO_ESTADO_ACCESO("CAMBIO_ESTADO_ACCESO"),
+    CREACION_EMPRESA("CREACION_EMPRESA"),
+    ACTUALIZACION_EMPRESA("ACTUALIZACION_EMPRESA"),
+    ELIMINACION_EMPRESA("ELIMINACION_EMPRESA"),
+    REGISTRO_VISITA("REGISTRO_VISITA"),
+    APROBACION_VISITA("APROBACION_VISITA"),
+    RECHAZO_VISITA("RECHAZO_VISITA"),
+    CHECK_IN("CHECK_IN"),
+    CHECK_OUT("CHECK_OUT"),
+    CIERRE_AUTOMATICO_VISITA("CIERRE_AUTOMATICO_VISITA"),
+    REGISTRO_INCIDENTE("REGISTRO_INCIDENTE"),
+    CAMBIO_ROL_PERMISOS("CAMBIO_ROL_PERMISOS");
+
+    private final String codigo;
+
+    AccionAuditoria(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    @Override
+    public String toString() {
+        return codigo;
+    }
+}
