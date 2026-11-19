@@ -342,6 +342,8 @@ Cada login (exitoso o fallido), alta/edición/baja de usuarios, personas y empre
 
 ## 7. Resumen para la sustentación
 
+> **Hoja de bolsillo:** comandos, credenciales y respuestas cortas en [`docs/GUIA-SUSTENTACION.md`](docs/GUIA-SUSTENTACION.md).
+
 - **Una capa, una responsabilidad:** Swing → `SicaController` → `service` → `dao` → MySQL; la vista jamás toca SQL.
 - **RBAC en dos lugares:** la UI oculta módulos y el servicio vuelve a validar con `sesion.requerir("permiso")`.
 - **Tiempo real sin frameworks:** `VisitaEventBus` + `SwingUtilities.invokeLater`, reforzado con `ScheduledExecutorService`.
