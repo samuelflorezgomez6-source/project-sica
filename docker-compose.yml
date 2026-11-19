@@ -1,0 +1,42 @@
+services:
+  sica-mysql:
+    image: mysql:8.0
+    container_name: sica-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: sica_db
+      MYSQL_USER: sica_user
+      MYSQL_PASSWORD: sica_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/data.sql:/docker-entrypoint-initdb.d/02_data.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot1234 --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: sica-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      sica-mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: sica-mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root1234
+      UPLOAD_LIMIT: 16M
+    ports:
+      - "8081:80"
+
+volumes:
+  mysql_data:
+    name: sica_mysql_data
