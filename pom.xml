@@ -96,6 +96,9 @@
                 <version>3.3.0</version>
                 <configuration>
                     <mainClass>${exec.mainClass}</mainClass>
+                    <!-- Evita avisos del plugin al cerrar la ventana: el hilo de limpieza
+                         del conector MySQL es daemon y muere con la JVM. -->
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
                 </configuration>
             </plugin>
         </plugins>
