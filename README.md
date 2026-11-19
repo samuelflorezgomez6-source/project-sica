@@ -249,8 +249,10 @@ Resultado esperado: 11 tablas, 25 permisos y 4 roles.
 
 | Servicio | Dirección | Credenciales |
 |---|---|---|
-| MySQL 8.0 | `localhost:3306` | usuario `sica_user` / contraseña `sica_pass` (root: `root1234`) |
+| MySQL 8.0 | `localhost:3307` | usuario `sica_user` / contraseña `sica_pass` (root: `root1234`) |
 | phpMyAdmin | <http://localhost:8081> | `sica_user` / `sica_pass` o `root` / `root1234` |
+
+> Usamos el puerto **3307** en el equipo host para no chocar con un MySQL local ya instalado (muy común en Windows). Dentro del contenedor MySQL sigue escuchando en 3306 y phpMyAdmin se conecta por la red interna de Docker. Si en tu PC no hay MySQL local, también funciona igual.
 
 > Los scripts `db/schema.sql` y `db/data.sql` se montan en `/docker-entrypoint-initdb.d` y se ejecutan **solo la primera vez** que se crea el volumen `sica_mysql_data`. Para reiniciar los datos: `docker compose down -v && docker compose up -d`.
 
