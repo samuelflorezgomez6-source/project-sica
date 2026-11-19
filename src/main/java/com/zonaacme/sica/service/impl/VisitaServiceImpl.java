@@ -85,6 +85,14 @@ public class VisitaServiceImpl implements VisitaService {
     }
 
     @Override
+    public List<Visita> aprobadasParaCheckIn(Sesion sesion) {
+        sesion.requerir("ver_control_acceso");
+        return visitaDao.findAll().stream()
+                .filter(v -> v.getEstado() == EstadoVisita.APROBADO && v.getFechaEntrada() == null)
+                .toList();
+    }
+
+    @Override
     public List<Visita> dentro(Sesion sesion) {
         sesion.requerir("ver_control_acceso");
         return visitaDao.findDentro();
